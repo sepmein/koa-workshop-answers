@@ -1,4 +1,3 @@
-
 var fs = require('fs');
 
 /**
@@ -11,8 +10,10 @@ var fs = require('fs');
  * Hint: you can return a yieldable.
  */
 
-exports.stat = function (filename) {
-
+exports.stat = function(filename) {
+	return function(done){
+		fs.stat(filename, done);
+	}
 };
 
 /**
@@ -31,6 +32,16 @@ exports.stat = function (filename) {
  * is not an error object, unlike node callbacks.
  */
 
-exports.exists = function (filename) {
-
+exports.exists = function(filename) {
+	return function(done){
+		fs.stat(filename, function(err, stat){
+			if(err == undefined) {
+				done(err, true);
+			} else {
+				// console.log(err);
+				// console.log(stat);
+				done(false, false);
+			}
+		})
+	}
 };
