@@ -8,9 +8,9 @@ Answers for https://github.com/koajs/workshop
 ##### Current Stats:
 
 - [x] 01-co
-- [ ] 02-hello-world
-- [ ] 03-routing
-- [ ] 04-bodies
+- [x] 02-hello-world
+- [x] 03-routing
+- [x] 04-bodies (with bonus)
 - [ ] 05-error-handling
 - [ ] 06-content-negotiation
 - [ ] 07-content-headers
