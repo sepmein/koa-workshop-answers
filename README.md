@@ -13,7 +13,7 @@ Answers for https://github.com/koajs/workshop
 - [x] 04-bodies (with bonus)
 - [x] 05-error-handling
 - [x] 06-content-negotiation
-- [ ] 07-content-headers
-- [ ] 08-docorators
+- [x] 07-content-headers
+- [x] 08-docorators
 - [ ] 09-templating
 - [ ] 10-authentication
