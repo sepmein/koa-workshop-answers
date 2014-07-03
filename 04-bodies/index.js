@@ -32,5 +32,3 @@ app.use(function * (next) {
 		message: 'hello world'
 	};
 });
-
-app.listen(3000);
