@@ -15,5 +15,5 @@ Answers for https://github.com/koajs/workshop
 - [x] 06-content-negotiation
 - [x] 07-content-headers
 - [x] 08-docorators
-- [ ] 09-templating
+- [x] 09-templating
 - [ ] 10-authentication
