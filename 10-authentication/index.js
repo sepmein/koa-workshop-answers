@@ -1,4 +1,3 @@
-
 var fs = require('fs');
 var koa = require('koa');
 var path = require('path');
@@ -19,22 +18,45 @@ app.use(session());
 // we need to set the `.keys` for signed cookies and the cookie-session module
 app.keys = ['secret1', 'secret2', 'secret3'];
 
-app.use(function* home(next) {
-  if (this.request.path !== '/') return yield next;
+app.use(function * home(next) {
+	if (this.request.path !== '/') return yield next;
 
-  if (!this.session.authenticated) this.throw(401, 'user not authenticated');
+	if (!this.session.authenticated) this.throw(401, 'user not authenticated');
 
-  this.response.body = 'hello world';
+	this.response.body = 'hello world';
 })
 
 /**
  * If successful, the logged in user should be redirected to `/`.
  */
 
-app.use(function* login(next) {
-  if (this.request.path !== '/login') return yield* next;
-  if (this.request.method === 'GET') return this.response.body = form.replace('{{csrf}}', this.csrf);
+app.use(function * login(next) {
+	if (this.request.path !== '/login') return yield * next;
+	if (this.request.method === 'GET') return this.response.body = form.replace('{{csrf}}', this.csrf);
+	if (this.request.method === 'POST') {
+		var body = yield parse(this);
 
+		try {
+			this.assertCSRF(body)
+		} catch (err) {
+			this.status = 403
+			this.body = {
+				message: 'This CSRF token is invalid!'
+			}
+			return
+		}
+		console.log(body);
+
+		if (body.username === 'username' && body.password === 'password') {
+			this.session.authenticated = true;
+			this.response.status = 303;
+			this.set({
+				Location: '/'
+			})
+		} else {
+			this.status = 400;
+		}
+	}
 })
 
 /**
@@ -43,9 +65,15 @@ app.use(function* login(next) {
  * let's not consider that an error and rather a "success".
  */
 
-app.use(function* logout(next) {
-  if (this.request.path !== '/logout') return yield* next;
-
+app.use(function * logout(next) {
+	if (this.request.path !== '/logout') return yield * next;
+	if (this.session.authenticated) {
+		delete this.session.authenticated;
+	}
+	this.response.status = 303;
+	this.set({
+		location: '/login'
+	})
 })
 
 /**
